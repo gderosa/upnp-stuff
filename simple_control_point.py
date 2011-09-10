@@ -45,14 +45,14 @@ def list_devices(devices):
         print
         count += 1
 
-def print_device(dev, ident=1):
-    print '\t'*ident, 'UDN (id): ', dev.udn
-    print '\t'*ident, 'Name: ', dev.friendly_name
-    print '\t'*ident, 'Type: ', dev.device_type
-    print '\t'*ident, 'Services: ', dev.services.keys()
-    print '\t'*ident, 'Embedded devices: '
+def print_device(dev, indent=1):
+    print '\t'*indent, 'UDN (id): ', dev.udn
+    print '\t'*indent, 'Name: ', dev.friendly_name
+    print '\t'*indent, 'Type: ', dev.device_type
+    print '\t'*indent, 'Services: ', dev.services.keys()
+    print '\t'*indent, 'Embedded devices: '
     for d in dev.devices.values():
-       print_device(d, ident+1)
+       print_device(d, indent+1)
        print
 
 def list_services(dev):
@@ -116,7 +116,7 @@ def run_interactive(c):
 
 def run(c):
     c.start_search(600, 'ssdp:all') # async / threaded
-    time.sleep(1) # necessary...
+    time.sleep(8) # necessary...
     list_devices(devices)
     c.stop_search()
     reactor.main_quit()
