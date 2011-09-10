@@ -1,12 +1,9 @@
-# Modeled on an example from Brisa sources
-
 # Licensed under the MIT license
 # http://opensource.org/licenses/mit-license.php or see LICENSE file.
 # Copyright 2007-2008 Brisa Team <brisa-develop@garage.maemo.org>
 
-# edited by Guido De Rosa, 2011
-
 import sys
+import time
 
 from brisa.core.reactors import install_default_reactor
 reactor = install_default_reactor()
@@ -75,7 +72,7 @@ def main():
     reactor.main()
 
 
-def run(c):
+def run_interactive(c):
     while True:
         #try:
         #    input_ = raw_input('>>> ').strip()
@@ -116,6 +113,13 @@ def run(c):
 
     reactor.main_quit()
 
+
+def run(c):
+    c.start_search(600, 'ssdp:all') # async / threaded
+    time.sleep(1) # necessary...
+    list_devices(devices)
+    c.stop_search()
+    reactor.main_quit()
 
 if __name__ == '__main__':
     main()
