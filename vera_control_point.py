@@ -54,7 +54,15 @@ def print_device(dev, indent=1):
     print '\t'*indent, 'Embedded devices: '
     for d in dev.devices.values():
        if d.device_type == 'urn:schemas-upnp-org:device:BinaryLight:1':  
-          print_device(d, indent+1)
+          switch_power = d.get_service_by_type('urn:schemas-upnp-org:service:SwitchPower:1')
+          set_target = switch_power.SetTarget # Action
+
+          time.sleep(1)
+          switch_power.SetTarget(newTargetValue='1')
+
+          time.sleep(1)
+          switch_power.SetTarget(newTargetValue='0')
+          #print_device(d, indent+1)
           print
 
 def list_services(dev):
@@ -76,7 +84,7 @@ def main():
 
 def run(c):
     c.start_search(600, 'urn:schemas-micasaverde-com:device:HomeAutomationGateway:1') # async / threaded
-    time.sleep(5) # necessary...
+    time.sleep(1) # necessary...
     list_devices(devices)
 
     c.stop_search()
