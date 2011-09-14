@@ -2,11 +2,10 @@
 # http://opensource.org/licenses/mit-license.php or see LICENSE file.
 # Copyright 2007-2008 Brisa Team <brisa-develop@garage.maemo.org>
 
-import sys
 import time
 
-from brisa.core.reactors import install_default_reactor
-reactor = install_default_reactor()
+from brisa.core.reactors import SelectReactor
+reactor = SelectReactor()
 
 from brisa.upnp.control_point import ControlPoint
 from brisa.core.threaded_call import run_async_function
@@ -72,51 +71,9 @@ def main():
     reactor.main()
 
 
-def run_interactive(c):
-    while True:
-        #try:
-        #    input_ = raw_input('>>> ').strip()
-        #except KeyboardInterrupt, EOFError:
-        #    break
-
-        input_ = sys.stdin.readline().strip()
-
-        if input_ == '':
-            print
-            continue
-
-        elif input_ == 'test':
-            print 'I am working!'
-
-        elif input_ == 'list':
-            list_devices(devices)
-
-        elif input_ == 'exit':
-            break
-
-        elif input_ == 'search':
-            c.start_search(600, 'upnp:rootdevice')
-
-        elif input_ == 'stop':
-            c.stop_search()
-
-        elif input_.find('MyMethod') == 0:
-            device = devices[int(input_.split(' ')[1])]
-            k, service = device.services.items()[0]
-
-            response = service.MyMethod(TextIn="In!!")
-            print "Return:", response
-
-        elif input_ == 'help':
-            print 'Commands available: list, exit, ' \
-            'search, stop, help, MyMethod'
-
-    reactor.main_quit()
-
-
 def run(c):
     c.start_search(600, 'ssdp:all') # async / threaded
-    time.sleep(8) # necessary...
+    time.sleep(35) # necessary...
     list_devices(devices)
     c.stop_search()
     reactor.main_quit()
