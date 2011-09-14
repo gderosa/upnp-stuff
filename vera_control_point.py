@@ -2,6 +2,8 @@
 # http://opensource.org/licenses/mit-license.php or see LICENSE file.
 # Copyright 2007-2008 Brisa Team <brisa-develop@garage.maemo.org>
 
+# modified by Guido De Rosa
+
 import time
 
 from brisa.core.reactors import SelectReactor
@@ -72,8 +74,8 @@ def main():
 
 
 def run(c):
-    c.start_search(600, 'ssdp:all') # async / threaded
-    time.sleep(35) # necessary...
+    c.start_search(600, 'urn:schemas-micasaverde-com:device:HomeAutomationGateway:1') # async / threaded
+    time.sleep(5) # necessary...
     list_devices(devices)
     c.stop_search()
     reactor.main_quit()
