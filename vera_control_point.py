@@ -53,8 +53,9 @@ def print_device(dev, indent=1):
     print '\t'*indent, 'Services: ', dev.services.keys()
     print '\t'*indent, 'Embedded devices: '
     for d in dev.devices.values():
-       print_device(d, indent+1)
-       print
+       if d.device_type == 'urn:schemas-upnp-org:device:BinaryLight:1':  
+          print_device(d, indent+1)
+          print
 
 def list_services(dev):
     count = 0
@@ -66,7 +67,7 @@ def list_services(dev):
 
 
 def main():
-    c = create()
+    c = create() # create control point
     c.start()
     reactor.add_after_stop_func(c.stop)
     run_async_function(run, (c, ))
@@ -77,6 +78,7 @@ def run(c):
     c.start_search(600, 'urn:schemas-micasaverde-com:device:HomeAutomationGateway:1') # async / threaded
     time.sleep(5) # necessary...
     list_devices(devices)
+
     c.stop_search()
     reactor.main_quit()
 
