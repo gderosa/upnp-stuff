@@ -47,23 +47,35 @@ def list_devices(devices):
         count += 1
 
 def print_device(dev, indent=1):
+
     print '\t'*indent, 'UDN (id): ', dev.udn
     print '\t'*indent, 'Name: ', dev.friendly_name
     print '\t'*indent, 'Type: ', dev.device_type
     print '\t'*indent, 'Services: ', dev.services.keys()
     print '\t'*indent, 'Embedded devices: '
+
     for d in dev.devices.values():
-       if d.device_type == 'urn:schemas-upnp-org:device:BinaryLight:1':  
-          switch_power = d.get_service_by_type('urn:schemas-upnp-org:service:SwitchPower:1')
-          set_target = switch_power.SetTarget # Action
 
-          time.sleep(1)
-          switch_power.SetTarget(newTargetValue='1')
+        if d.device_type == 'urn:schemas-upnp-org:device:BinaryLight:1':  
+            turn_on_off(d)
 
-          time.sleep(1)
-          switch_power.SetTarget(newTargetValue='0')
-          #print_device(d, indent+1)
-          print
+        print_device(d, indent+1)
+
+
+def turn_on_off(d): 
+    switch_power = d.get_service_by_type('urn:schemas-upnp-org:service:SwitchPower:1')
+
+    if (hasattr(switch_power,'SetTarget')):
+        print "\nNow I am turning on/off the light!\n"
+
+        time.sleep(1)
+        switch_power.SetTarget(newTargetValue='1')
+
+        time.sleep(2)
+        switch_power.SetTarget(newTargetValue='0')
+
+        time.sleep(1)
+    
 
 def list_services(dev):
     count = 0
