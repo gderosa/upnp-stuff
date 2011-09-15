@@ -59,8 +59,20 @@ def print_device(dev, indent=1):
         if d.device_type == 'urn:schemas-upnp-org:device:BinaryLight:1':  
             turn_on_off(d)
 
+        if d.device_type == 'urn:schemas-micasaverde-com:device:TemperatureSensor:1':
+            print_temerature(d)
+
         print_device(d, indent+1)
 
+def print_temerature(d):
+
+    hadev = d.get_service_by_type('urn:schemas-micasaverde-com:service:HaDevice:1')
+    
+    if (hasattr(hadev, 'Poll')):
+        print 'Poll'
+        print hadev.Poll()
+
+    time.sleep(2)
 
 def turn_on_off(d): 
     switch_power = d.get_service_by_type('urn:schemas-upnp-org:service:SwitchPower:1')
@@ -70,9 +82,11 @@ def turn_on_off(d):
 
         time.sleep(1)
         switch_power.SetTarget(newTargetValue='1')
+        print switch_power.GetTarget()
 
         time.sleep(2)
         switch_power.SetTarget(newTargetValue='0')
+        print switch_power.GetTarget()
 
         time.sleep(1)
     
